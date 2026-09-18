@@ -50,7 +50,11 @@ if process_clicked and uploaded_files:
             os.remove(tmp_path)
 
         # Embeddings banao aur FAISS index banao
-        embeddings = OllamaEmbeddings(model="nomic-embed-text", base_url=st.secrets["OLLAMA_URL"])
+        embeddings = OllamaEmbeddings(
+        model="nomic-embed-text",
+        base_url=st.secrets["OLLAMA_URL"],
+        client_kwargs={"headers": {"ngrok-skip-browser-warning": "true"}}
+)
         vector_store = FAISS.from_documents(all_chunks, embeddings)
 
         # session_state mein store karo - taaki reruns ke beech yaad rahe
@@ -62,7 +66,11 @@ if process_clicked and uploaded_files:
 # Step D: LLM ko cache karo (ye baar baar reload nahi hoga)
 @st.cache_resource
 def load_llm():
-       return ChatOllama(model="qwen3-vl:2b", base_url=st.secrets["OLLAMA_URL"])
+       return ChatOllama(
+        model="qwen3-vl:2b",
+        base_url=st.secrets["OLLAMA_URL"],
+        client_kwargs={"headers": {"ngrok-skip-browser-warning": "true"}}
+        )
 
 llm = load_llm()
 
